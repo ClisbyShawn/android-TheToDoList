@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:id="@+id/tv_main_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Logged In"
+        tools:text="Logged In"
         android:gravity="center"/>
 
 </FrameLayout>
