@@ -34,7 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="@string/email_address_hint"
         app:hintEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,8 +42,11 @@
         app:layout_constraintVertical_bias=".25">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_login_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="@string/email_address_hint"
+            android:inputType="textEmailAddress" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,15 +58,18 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:hint="@string/password_hint"
+        app:endIconMode="password_toggle"
         app:hintEnabled="true"
         app:layout_constraintEnd_toEndOf="@id/til_login_email_address"
         app:layout_constraintStart_toStartOf="@id/til_login_email_address"
         app:layout_constraintTop_toBottomOf="@id/til_login_email_address">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_login_password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,8 +88,8 @@
         android:id="@+id/view_login_separator"
         android:layout_width="120dp"
         android:layout_height="2dp"
-        android:background="#c0c0c0"
         android:layout_marginTop="24dp"
+        android:background="#c0c0c0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_login_sign_in" />

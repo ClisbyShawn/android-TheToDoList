@@ -9,4 +9,9 @@
         android:name="com.android.shawnclisby.thetodolist.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.android.shawnclisby.thetodolist.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" />
 </navigation>
