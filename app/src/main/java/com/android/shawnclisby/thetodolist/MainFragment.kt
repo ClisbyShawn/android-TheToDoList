@@ -21,7 +21,6 @@ class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         authViewModel = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
-        authViewModel.me()
     }
 
     override fun onCreateView(

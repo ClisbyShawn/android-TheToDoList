@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
             response.data?.let { authToken ->
                 TokenEntry.onToken(authToken)
                 navController.navigate(R.id.mainFragment)
+                authViewModel.me()
             }
 
             response.message?.let { errorMessage ->
