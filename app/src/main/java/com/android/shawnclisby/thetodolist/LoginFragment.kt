@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
 import com.android.shawnclisby.thetodolist.databinding.FragmentLoginBinding
 
@@ -23,12 +24,13 @@ class LoginFragment : Fragment() {
         val authViewModel = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
 
         binding.buttonLoginSignIn.setOnClickListener {
-            authViewModel.login(
-                mapOf(
-                    "email" to binding.tieLoginEmail.text.toString().trim(),
-                    "password" to binding.tieLoginPassword.text.toString().trim()
-                )
-            )
+//            authViewModel.login(
+//                mapOf(
+//                    "email" to binding.tieLoginEmail.text.toString().trim(),
+//                    "password" to binding.tieLoginPassword.text.toString().trim()
+//                )
+//            )
+            findNavController().navigate(R.id.mainFragment)
         }
 
         return binding.root

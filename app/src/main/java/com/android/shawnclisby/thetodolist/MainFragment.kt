@@ -21,7 +21,6 @@ class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         authViewModel = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
-        authViewModel.me()
     }
 
     override fun onCreateView(
@@ -31,11 +30,11 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        authViewModel.user.observe(viewLifecycleOwner, { response ->
-            response.data?.let { user ->
-                binding.tvMainUser.text = "$user"
-            }
-        })
+//        authViewModel.user.observe(viewLifecycleOwner, { response ->
+//            response.data?.let { user ->
+//                binding.tvMainUser.text = "$user"
+//            }
+//        })
 
         return binding.root
     }
