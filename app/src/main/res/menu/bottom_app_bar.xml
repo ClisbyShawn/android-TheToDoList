@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search"
+        android:contentDescription="Search for Task"
+        android:icon="@drawable/ic_search_24"
+        android:title="Search"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/settings"
+        android:contentDescription="Settings Options"
+        android:orderInCategory="102"
+        android:title="App"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/profile"
+        android:contentDescription="Profile Options"
+        android:orderInCategory="101"
+        android:title="Profile"
+        app:showAsAction="never" />
+
+</menu>
