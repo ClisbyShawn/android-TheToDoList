@@ -9,8 +9,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_home_task_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_task_list"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
@@ -23,10 +23,12 @@
         app:navigationIcon="@drawable/ic_sort_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_home_new_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/bottomAppBar"
         app:srcCompat="@drawable/ic_add_24"
-        app:tint="@color/white" />
+        app:tint="@color/white"
+        android:contentDescription="@string/fab_content_description" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

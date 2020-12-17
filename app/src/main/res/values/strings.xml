@@ -8,4 +8,6 @@
     <string name="app_title">The To Do List</string>
     <string name="sign_up_text">Don\'t have an account? Sign Up.</string>
     <string name="social_media_text">or sign in with</string>
+    <string name="high_priority_image_description">High Priority Image</string>
+    <string name="fab_content_description">Button to add a new task</string>
 </resources>
