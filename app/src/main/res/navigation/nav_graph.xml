@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.android.shawnclisby.thetodolist.MainFragment"
+        android:name="com.android.shawnclisby.thetodolist.HomeFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_home" />
 </navigation>

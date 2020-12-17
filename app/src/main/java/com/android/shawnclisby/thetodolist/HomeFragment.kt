@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
-import com.android.shawnclisby.thetodolist.databinding.FragmentMainBinding
+import com.android.shawnclisby.thetodolist.databinding.FragmentHomeBinding
 
 
-class MainFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-    private var _binding: FragmentMainBinding? = null
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var authViewModel: AuthViewModel
@@ -28,7 +28,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
 //        authViewModel.user.observe(viewLifecycleOwner, { response ->
 //            response.data?.let { user ->

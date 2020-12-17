@@ -4,23 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainFragment">
+    tools:context=".HomeFragment">
 
-    <!-- Note: A RecyclerView can also be used -->
-    <androidx.core.widget.NestedScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_home_task_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="100dp">
+        android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/tv_main_user"
-            android:layout_width="12dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Yo this is going to go down the bottom of the application that way i can see what we working with." />
-
-    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
@@ -28,9 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:hideOnScroll="true"
         app:menu="@menu/bottom_app_bar"
-        app:navigationIcon="@drawable/ic_sort_24"
-        app:hideOnScroll="true"/>
+        app:navigationIcon="@drawable/ic_sort_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
