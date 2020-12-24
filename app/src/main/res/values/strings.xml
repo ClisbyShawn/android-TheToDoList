@@ -10,4 +10,11 @@
     <string name="social_media_text">or sign in with</string>
     <string name="high_priority_image_description">High Priority Image</string>
     <string name="fab_content_description">Button to add a new task</string>
+    <string name="action_search">Search</string>
+    <string name="search_description">Search for task icon</string>
+    <string name="settings_description">Settings Options</string>
+    <string name="settings_title">App</string>
+    <string name="profile_description">Profile Options</string>
+    <string name="profile_title">Profile</string>
+    <string name="search_hint_label">Search...</string>
 </resources>

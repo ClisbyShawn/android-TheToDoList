@@ -10,7 +10,8 @@
         android:id="@+id/rv_home_task_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_task_list"/>
+        android:padding="4dp"
+        tools:listitem="@layout/item_task_list" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
@@ -26,9 +27,9 @@
         android:id="@+id/fab_home_new_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/fab_content_description"
         app:layout_anchor="@id/bottomAppBar"
         app:srcCompat="@drawable/ic_add_24"
-        app:tint="@color/white"
-        android:contentDescription="@string/fab_content_description" />
+        app:tint="@color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

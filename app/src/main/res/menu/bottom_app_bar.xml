@@ -4,23 +4,23 @@
 
     <item
         android:id="@+id/search"
-        android:contentDescription="Search for Task"
+        android:contentDescription="@string/search_description"
         android:icon="@drawable/ic_search_24"
-        android:title="Search"
+        android:title="@string/action_search"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/settings"
-        android:contentDescription="Settings Options"
+        android:contentDescription="@string/settings_description"
         android:orderInCategory="102"
-        android:title="App"
+        android:title="@string/settings_title"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/profile"
-        android:contentDescription="Profile Options"
+        android:contentDescription="@string/profile_description"
         android:orderInCategory="101"
-        android:title="Profile"
+        android:title="@string/profile_title"
         app:showAsAction="never" />
 
 </menu>
