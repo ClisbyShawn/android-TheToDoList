@@ -28,6 +28,34 @@ class TaskRepository {
                     "Build this app and test/add more features.",
                     priority = true,
                     completed = false
+                ),
+                Task(
+                    6,
+                    "Install smart strip LED lights for Nefatiti.",
+                    priority = true,
+                    completed = false
+                ),
+                Task(
+                    7,
+                    "Add Task RecyclerView.",
+                    priority = true,
+                    completed = false
+                ),
+                Task(
+                    8,
+                    "Add Task ViewModel."
+                ),
+                Task(
+                    9,
+                    "Add Task RecyclerAdapter.",
+                    priority = true,
+                    completed = false
+                ),
+                Task(
+                    10,
+                    "Create even more fake data for scrolling.",
+                    priority = true,
+                    completed = true
                 )
 
             )
