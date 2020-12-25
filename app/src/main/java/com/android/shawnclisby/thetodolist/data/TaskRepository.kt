@@ -13,7 +13,7 @@ class TaskRepository {
                 Task(
                     2,
                     "Put the Christmas lights up before December 25th, 2020.",
-                    priority = false,
+                    priority = true,
                     completed = false
                 ),
                 Task(3, "Check the mailbox today.", priority = false, completed = true),

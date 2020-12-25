@@ -32,4 +32,21 @@
         app:srcCompat="@drawable/ic_add_24"
         app:tint="@color/white" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_home_search"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_hint_label"
+        app:hintAnimationEnabled="true"
+        android:translationY="-60dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_home_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            android:imeOptions="actionSearch"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

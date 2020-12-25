@@ -14,7 +14,7 @@
 
     <TextView
         android:id="@+id/tv_item_task_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
@@ -22,6 +22,7 @@
         app:layout_constraintBottom_toBottomOf="@id/chbx_item_task"
         app:layout_constraintStart_toEndOf="@id/chbx_item_task"
         app:layout_constraintTop_toTopOf="@id/chbx_item_task"
+        app:layout_constraintEnd_toStartOf="@id/iv_item_task_priority"
         tools:text="This is a task that needs to be completed" />
 
     <ImageView
