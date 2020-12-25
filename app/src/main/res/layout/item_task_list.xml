@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        android:id="@+id/chbx_item_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_item_task_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#000"
+        app:layout_constraintBottom_toBottomOf="@id/chbx_item_task"
+        app:layout_constraintStart_toEndOf="@id/chbx_item_task"
+        app:layout_constraintTop_toTopOf="@id/chbx_item_task"
+        app:layout_constraintEnd_toStartOf="@id/iv_item_task_priority"
+        tools:text="This is a task that needs to be completed" />
+
+    <ImageView
+        android:id="@+id/iv_item_task_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:contentDescription="@string/high_priority_image_description"
+        android:padding="4dp"
+        android:src="@drawable/ic_priority_high"
+        app:layout_constraintBottom_toBottomOf="@id/chbx_item_task"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/chbx_item_task" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/chbx_item_task"
+        tools:text="Created December 17, 2020" />
+</androidx.constraintlayout.widget.ConstraintLayout>

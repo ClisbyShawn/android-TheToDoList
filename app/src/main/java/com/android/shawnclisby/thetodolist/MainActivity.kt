@@ -1,6 +1,7 @@
 package com.android.shawnclisby.thetodolist
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        window.decorView.apply {
+            systemUiVisibility =
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        }
+
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
         val navController = navController()
@@ -24,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         authViewModel.token.observe(this, { response ->
             response.data?.let { authToken ->
                 TokenEntry.onToken(authToken)
-                navController.navigate(R.id.mainFragment)
+                navController.navigate(R.id.action_loginFragment_to_homeFragment)
                 authViewModel.me()
             }
 

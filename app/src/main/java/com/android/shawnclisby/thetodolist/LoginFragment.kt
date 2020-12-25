@@ -30,7 +30,7 @@ class LoginFragment : Fragment() {
 //                    "password" to binding.tieLoginPassword.text.toString().trim()
 //                )
 //            )
-            findNavController().navigate(R.id.mainFragment)
+            findNavController().navigate(R.id.homeFragment)
         }
 
         return binding.root
