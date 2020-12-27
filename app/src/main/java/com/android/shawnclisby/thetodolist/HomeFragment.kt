@@ -1,11 +1,10 @@
 package com.android.shawnclisby.thetodolist
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +16,9 @@ import com.android.shawnclisby.thetodolist.ui.TaskRecyclerAdapter
 import com.android.shawnclisby.thetodolist.util.hideKeyboard
 import com.android.shawnclisby.thetodolist.util.lowBounceStiffnessTranslationY
 import com.android.shawnclisby.thetodolist.util.showKeyboard
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 
 class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
@@ -40,7 +42,6 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         val taskAdapter = TaskRecyclerAdapter(requireContext(), this)
@@ -59,6 +60,19 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
                 else -> false
             }
+        }
+
+        binding.tieHomeSearch.addTextChangedListener { newText->
+            CoroutineScope(IO).launch {
+                taskViewModel.search(newText.toString().trim())
+            }
+        }
+        binding.tieHomeSearch.setOnEditorActionListener { _, actionId, _ ->
+            if(actionId == EditorInfo.IME_ACTION_DONE){
+                homeViewModel.onToggled.invoke()
+                true
+            }
+                false
         }
 
         homeViewModel.searchBar.observe(viewLifecycleOwner, { searchBar ->
@@ -100,7 +114,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         binding.tieHomeSearch.apply {
             requestFocus()
             showKeyboard(requireContext())
-            imeOptions = EditorInfo.IME_ACTION_SEARCH
+            imeOptions = EditorInfo.IME_ACTION_DONE
         }
     }
 
@@ -109,9 +123,6 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
         binding.tilHomeSearch.lowBounceStiffnessTranslationY(-205f)
 
-        binding.tieHomeSearch.apply {
-            requestFocus()
-            hideKeyboard(requireContext())
-        }
+        binding.tieHomeSearch.hideKeyboard(requireContext())
     }
 }
