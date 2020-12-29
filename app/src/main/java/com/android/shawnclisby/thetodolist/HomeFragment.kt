@@ -61,10 +61,17 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                 else -> false
             }
         }
+        binding.bottomAppBar.setNavigationOnClickListener {
+            taskViewModel.filterToggle()
+            CoroutineScope(IO).launch {
+                taskViewModel.searchFilterSortList()
+            }
+        }
 
         binding.tieHomeSearch.addTextChangedListener { newText->
+            taskViewModel.search(newText.toString().trim())
             CoroutineScope(IO).launch {
-                taskViewModel.search(newText.toString().trim())
+                taskViewModel.searchFilterSortList()
             }
         }
         binding.tieHomeSearch.setOnEditorActionListener { _, actionId, _ ->

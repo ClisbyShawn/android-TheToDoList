@@ -1,39 +1,43 @@
 package com.android.shawnclisby.thetodolist.data
 
-import androidx.lifecycle.*
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 
 class TaskViewModel : ViewModel() {
 
     private val taskRepository: TaskRepository =
         TaskRepository()
 
-    private var _taskList: MutableLiveData<List<Task>> = MutableLiveData()
+    private val flowList = taskRepository.flowList
+
+    private val _taskList: MutableLiveData<List<Task>> =
+        flowList.asLiveData() as MutableLiveData<List<Task>>
+
     val taskList: LiveData<List<Task>> = _taskList
 
-    private val flowList: Flow<List<Task>> =
-        taskRepository.getList()
+    private val _searchString = MutableLiveData("")
+    private val _hideCompleted = MutableLiveData(false)
 
-    init {
-        viewModelScope.launch {
-            initialize()
-        }
-    }
-
-    private suspend fun initialize() {
-        flowList.collect { list-> _taskList.postValue(list) }
-    }
-
-    suspend fun search(query: String) {
+    suspend fun searchFilterSortList() {
         flowList.combine(
-            flowOf(query)
+            flowOf(_searchString.value ?: "")
         ) { tasks, searchQuery ->
-            searchQueryOperation(tasks, searchQuery)
-        }.collect { value ->
-            _taskList.postValue(value)
-        }
+            if (_hideCompleted.value!!) {
+                searchQueryOperation(filterOperation(tasks), searchQuery)
+            } else searchQueryOperation(tasks, searchQuery)
+
+        }.collect { value -> _taskList.postValue(value) }
+    }
+
+    /* region Search */
+
+    fun search(searchString: String) {
+        _searchString.value = searchString
     }
 
     private fun searchQueryOperation(tasks: List<Task>, searchQuery: String): ArrayList<Task> {
@@ -44,4 +48,22 @@ class TaskViewModel : ViewModel() {
         }
         return matchingTasks
     }
+
+    /* endregion Search */
+
+    /* region Filter */
+
+    fun filterToggle() {
+        _hideCompleted.value = !_hideCompleted.value!!
+    }
+
+    private fun filterOperation(tasks: List<Task>): List<Task> {
+        val unCompletedTasks: ArrayList<Task> = ArrayList()
+        tasks.forEach { task ->
+            if (!task.completed) unCompletedTasks.add(task)
+        }
+        return unCompletedTasks.toList()
+    }
+
+    /* endregion Filter */
 }
