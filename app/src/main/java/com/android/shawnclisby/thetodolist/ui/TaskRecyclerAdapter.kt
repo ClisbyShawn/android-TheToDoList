@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.android.shawnclisby.thetodolist.data.Task
+import com.android.shawnclisby.thetodolist.data.models.Task
 import com.android.shawnclisby.thetodolist.databinding.ItemTaskListBinding
 import com.android.shawnclisby.thetodolist.ui.TaskRecyclerAdapter.TaskViewHolder
 import com.android.shawnclisby.thetodolist.util.hide
