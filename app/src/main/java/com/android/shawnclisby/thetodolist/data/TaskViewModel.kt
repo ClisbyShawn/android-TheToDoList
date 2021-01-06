@@ -1,69 +1,53 @@
 package com.android.shawnclisby.thetodolist.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import kotlinx.coroutines.flow.collect
+import android.app.Application
+import androidx.lifecycle.*
+import com.android.shawnclisby.thetodolist.data.models.Task
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.launch
 
-class TaskViewModel : ViewModel() {
+class TaskViewModel(application: Application) : ViewModel() {
 
     private val taskRepository: TaskRepository =
-        TaskRepository()
+        TaskRepository(application)
 
-    private val flowList = taskRepository.flowList
+    val searchString = MutableLiveData("")
+    private val hideCompleted = MutableLiveData(false)
 
-    private val _taskList: MutableLiveData<List<Task>> =
-        flowList.asLiveData() as MutableLiveData<List<Task>>
-
-    val taskList: LiveData<List<Task>> = _taskList
-
-    private val _searchString = MutableLiveData("")
-    private val _hideCompleted = MutableLiveData(false)
-
-    suspend fun searchFilterSortList() {
-        flowList.combine(
-            flowOf(_searchString.value ?: "")
-        ) { tasks, searchQuery ->
-            if (_hideCompleted.value!!) {
-                searchQueryOperation(filterOperation(tasks), searchQuery)
-            } else searchQueryOperation(tasks, searchQuery)
-
-        }.collect { value -> _taskList.postValue(value) }
+    private val flowList = combine(
+        searchString.asFlow(),
+        hideCompleted.asFlow()
+    ) { query, hide ->
+        mapOf(
+            "query" to query,
+            "hide" to hide
+        )
+    }.flatMapLatest { map ->
+        taskRepository.getTasks(map["query"] as String, map["hide"] as Boolean)
     }
 
-    /* region Search */
+    val taskList = flowList.asLiveData()
 
-    fun search(searchString: String) {
-        _searchString.value = searchString
-    }
-
-    private fun searchQueryOperation(tasks: List<Task>, searchQuery: String): ArrayList<Task> {
-        val matchingTasks: ArrayList<Task> = ArrayList()
-        tasks.forEach { task ->
-            if (task.title.toLowerCase().contains(searchQuery.toLowerCase()))
-                matchingTasks.add(task)
+    fun insert(task: Task) {
+        viewModelScope.launch {
+            taskRepository.insert(task)
         }
-        return matchingTasks
     }
 
-    /* endregion Search */
-
-    /* region Filter */
-
-    fun filterToggle() {
-        _hideCompleted.value = !_hideCompleted.value!!
-    }
-
-    private fun filterOperation(tasks: List<Task>): List<Task> {
-        val unCompletedTasks: ArrayList<Task> = ArrayList()
-        tasks.forEach { task ->
-            if (!task.completed) unCompletedTasks.add(task)
+    fun update(task: Task) {
+        viewModelScope.launch {
+            taskRepository.update(task)
         }
-        return unCompletedTasks.toList()
     }
 
-    /* endregion Filter */
+    fun delete(task: Task) {
+        viewModelScope.launch {
+            taskRepository.delete(task)
+        }
+    }
+
+    fun toggleFilter() {
+        hideCompleted.value = !hideCompleted.value!!
+    }
 }

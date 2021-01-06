@@ -1,62 +1,36 @@
 package com.android.shawnclisby.thetodolist.data
 
+import android.app.Application
+import com.android.shawnclisby.thetodolist.data.models.Task
+import com.android.shawnclisby.thetodolist.data.room.TaskDao
+import com.android.shawnclisby.thetodolist.data.room.TheListDatabase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
-class TaskRepository {
+class TaskRepository(application: Application) {
 
-    private val taskList: ArrayList<Task> = arrayListOf(
-        Task(0, "Take out trash", priority = true, completed = true),
-        Task(1, "Wash the dishes", priority = true, completed = false),
-        Task(
-            2,
-            "Put the Christmas lights up before December 25th, 2020.",
-            priority = true,
-            completed = false
-        ),
-        Task(3, "Check the mailbox today.", priority = false, completed = true),
-        Task(
-            4,
-            "Platinum God of War: Chains of Olympus",
-            priority = false,
-            completed = false
-        ),
-        Task(
-            5,
-            "Build this app and test/add more features.",
-            priority = true,
-            completed = false
-        ),
-        Task(
-            6,
-            "Install smart strip LED lights for Nefatiti.",
-            priority = true,
-            completed = false
-        ),
-        Task(
-            7,
-            "Add Task RecyclerView.",
-            priority = true,
-            completed = false
-        ),
-        Task(
-            8,
-            "Add Task ViewModel."
-        ),
-        Task(
-            9,
-            "Add Task RecyclerAdapter.",
-            priority = true,
-            completed = false
-        ),
-        Task(
-            10,
-            "Create even more fake data for scrolling.",
-            priority = true,
-            completed = true
-        )
+    private val database = TheListDatabase.getDatabase(application)
+    private val taskDao: TaskDao = database.taskDao()
 
-    )
+    fun getTasks(query: String, hideCompleted: Boolean): Flow<List<Task>> {
+        return taskDao.getTasksFlow().map { tasks ->
+            tasks.filter { task ->
+                if (hideCompleted)
+                task.title.toLowerCase().contains(query.toLowerCase()) && !task.completed
+                else task.title.toLowerCase().contains(query.toLowerCase())
+            }
+        }
+    }
 
-    val flowList: Flow<List<Task>> = flowOf(taskList)
+    suspend fun insert(task: Task) {
+        taskDao.insertTask(task)
+    }
+
+    suspend fun update(task: Task) {
+        taskDao.updateTask(task)
+    }
+
+    suspend fun delete(task: Task) {
+        taskDao.deleteTask(task)
+    }
 }
