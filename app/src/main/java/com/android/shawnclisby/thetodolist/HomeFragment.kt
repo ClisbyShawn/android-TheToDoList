@@ -1,7 +1,9 @@
 package com.android.shawnclisby.thetodolist
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -9,17 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
-import com.android.shawnclisby.thetodolist.data.Task
 import com.android.shawnclisby.thetodolist.data.TaskViewModel
+import com.android.shawnclisby.thetodolist.data.models.Task
 import com.android.shawnclisby.thetodolist.databinding.FragmentHomeBinding
 import com.android.shawnclisby.thetodolist.ui.TaskRecyclerAdapter
 import com.android.shawnclisby.thetodolist.util.hideKeyboard
 import com.android.shawnclisby.thetodolist.util.lowBounceStiffnessTranslationY
 import com.android.shawnclisby.thetodolist.util.showKeyboard
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
-
 
 class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
@@ -27,6 +25,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
     private val binding get() = _binding!!
 
     private lateinit var authViewModel: AuthViewModel
+    private lateinit var taskViewModelFactory: TaskViewModelFactory
     private lateinit var taskViewModel: TaskViewModel
     private lateinit var homeViewModel: HomeViewModel
 
@@ -34,7 +33,11 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         super.onCreate(savedInstanceState)
 
         authViewModel = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
-        taskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+
+        taskViewModelFactory = TaskViewModelFactory(requireActivity().application)
+        taskViewModel =
+            ViewModelProvider(this,taskViewModelFactory)
+                .get(TaskViewModel::class.java)
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
     }
 
@@ -46,40 +49,47 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
         val taskAdapter = TaskRecyclerAdapter(requireContext(), this)
 
-        binding.rvHomeTaskList.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = taskAdapter
-        }
+        binding.apply {
 
-        binding.bottomAppBar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.search -> {
-                    homeViewModel.onToggled.invoke()
-                    true
+            rvHomeTaskList.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = taskAdapter
+            }
+
+            bottomAppBar.apply {
+                setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.search -> {
+                            homeViewModel.onToggled.invoke()
+                            true
+                        }
+
+                        else -> false
+                    }
                 }
 
-                else -> false
+                setNavigationOnClickListener {
+                    taskViewModel.toggleFilter()
+                }
             }
-        }
-        binding.bottomAppBar.setNavigationOnClickListener {
-            taskViewModel.filterToggle()
-            CoroutineScope(IO).launch {
-                taskViewModel.searchFilterSortList()
-            }
-        }
 
-        binding.tieHomeSearch.addTextChangedListener { newText->
-            taskViewModel.search(newText.toString().trim())
-            CoroutineScope(IO).launch {
-                taskViewModel.searchFilterSortList()
+            tieHomeSearch.apply {
+                addTextChangedListener { newText ->
+                    taskViewModel.searchString.value = newText.toString().trim()
+                }
+
+                setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        homeViewModel.onToggled.invoke()
+                        true
+                    }
+                    false
+                }
             }
-        }
-        binding.tieHomeSearch.setOnEditorActionListener { _, actionId, _ ->
-            if(actionId == EditorInfo.IME_ACTION_DONE){
-                homeViewModel.onToggled.invoke()
-                true
+
+            fabHomeNewTask.setOnClickListener {
+               //Navigate to Add/Edit Task Fragment
             }
-                false
         }
 
         homeViewModel.searchBar.observe(viewLifecycleOwner, { searchBar ->
@@ -114,22 +124,23 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
     }
 
     private fun applyShowSearchBarAnimation() {
-        binding.rvHomeTaskList.lowBounceStiffnessTranslationY(165f)
+        binding.apply {
+            rvHomeTaskList.lowBounceStiffnessTranslationY(165f)
+            tilHomeSearch.lowBounceStiffnessTranslationY(5f)
 
-        binding.tilHomeSearch.lowBounceStiffnessTranslationY(5f)
-
-        binding.tieHomeSearch.apply {
-            requestFocus()
-            showKeyboard(requireContext())
-            imeOptions = EditorInfo.IME_ACTION_DONE
+            tieHomeSearch.apply {
+                requestFocus()
+                showKeyboard(requireContext())
+                imeOptions = EditorInfo.IME_ACTION_DONE
+            }
         }
     }
 
     private fun applyHideSearchBarAnimation() {
-        binding.rvHomeTaskList.lowBounceStiffnessTranslationY(0f)
-
-        binding.tilHomeSearch.lowBounceStiffnessTranslationY(-205f)
-
-        binding.tieHomeSearch.hideKeyboard(requireContext())
+        binding.apply {
+            rvHomeTaskList.lowBounceStiffnessTranslationY(0f)
+            tilHomeSearch.lowBounceStiffnessTranslationY(-205f)
+            tieHomeSearch.hideKeyboard(requireContext())
+        }
     }
 }
