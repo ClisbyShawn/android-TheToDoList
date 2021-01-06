@@ -15,9 +15,7 @@ import com.android.shawnclisby.thetodolist.data.TaskViewModel
 import com.android.shawnclisby.thetodolist.data.models.Task
 import com.android.shawnclisby.thetodolist.databinding.FragmentHomeBinding
 import com.android.shawnclisby.thetodolist.ui.TaskRecyclerAdapter
-import com.android.shawnclisby.thetodolist.util.hideKeyboard
-import com.android.shawnclisby.thetodolist.util.lowBounceStiffnessTranslationY
-import com.android.shawnclisby.thetodolist.util.showKeyboard
+import com.android.shawnclisby.thetodolist.util.*
 
 class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
@@ -60,7 +58,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                 setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.search -> {
-                            homeViewModel.onToggled.invoke()
+                            homeViewModel.onSearchToggled.invoke()
                             true
                         }
 
@@ -69,7 +67,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                 }
 
                 setNavigationOnClickListener {
-                    taskViewModel.toggleFilter()
+                    homeViewModel.onFilterToggled.invoke()
                 }
             }
 
@@ -80,7 +78,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        homeViewModel.onToggled.invoke()
+                        homeViewModel.onSearchToggled.invoke()
                         true
                     }
                     false
@@ -96,6 +94,13 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             searchBar.showHide?.let { showHide ->
                 if (showHide) applyShowSearchBarAnimation()
                 else applyHideSearchBarAnimation()
+            }
+        })
+
+        homeViewModel.filterContainer.observe(viewLifecycleOwner, { filterContainer ->
+            filterContainer.showHide?.let { showHide->
+                if (showHide) applyShowFilterAnimation()
+                else applyHideFilterAnimation()
             }
         })
 
@@ -141,6 +146,22 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             rvHomeTaskList.lowBounceStiffnessTranslationY(0f)
             tilHomeSearch.lowBounceStiffnessTranslationY(-205f)
             tieHomeSearch.hideKeyboard(requireContext())
+        }
+    }
+
+    private fun applyShowFilterAnimation() {
+        binding.apply {
+            constraintHomeFilterContainer.animateByTranslationYAlphaShow((-60f).toDps(requireContext()))
+            bottomAppBar.animateByTranslationYAlphaShow((-59f).toDps(requireContext()))
+            viewHomeOverlay.show()
+        }
+    }
+
+    private fun applyHideFilterAnimation() {
+        binding.apply {
+            viewHomeOverlay.gone()
+            constraintHomeFilterContainer.animateByTranslationYAlphaHide(60f.toDps(requireContext()))
+            bottomAppBar.animateByTranslationYAlphaShow(60f.toDps(requireContext()))
         }
     }
 }

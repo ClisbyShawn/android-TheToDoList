@@ -13,6 +13,14 @@
         android:padding="4dp"
         tools:listitem="@layout/item_task_list" />
 
+    <View
+        android:id="@+id/view_home_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone" />
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
@@ -48,5 +56,52 @@
             android:inputType="text"
             android:imeOptions="actionDone"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_home_filter_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:translationY="50dp"
+        android:background="@color/white">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_home_completed_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleLine="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_home_show_hide_completed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show Completed"/>
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_home_sort_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleLine="true"
+            app:singleSelection="true"
+            app:layout_constraintStart_toEndOf="@id/chip_group_home_completed_container"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_home_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_home_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"/>
+        </com.google.android.material.chip.ChipGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
