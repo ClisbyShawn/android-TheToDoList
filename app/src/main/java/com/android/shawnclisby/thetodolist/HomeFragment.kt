@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
 import com.android.shawnclisby.thetodolist.data.TaskViewModel
@@ -38,7 +37,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
         taskViewModelFactory = TaskViewModelFactory(requireActivity().application)
         taskViewModel =
-            ViewModelProvider(this,taskViewModelFactory)
+            ViewModelProvider(this, taskViewModelFactory)
                 .get(TaskViewModel::class.java)
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
     }
@@ -90,7 +89,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             }
 
             fabHomeNewTask.setOnClickListener {
-               //Navigate to Add/Edit Task Fragment
+                //Navigate to Add/Edit Task Fragment
             }
 
             chipHomeShowHideCompleted.setOnClickListener {
@@ -114,7 +113,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         })
 
         homeViewModel.filterContainer.observe(viewLifecycleOwner, { filterContainer ->
-            filterContainer.showHide?.let { showHide->
+            filterContainer.showHide?.let { showHide ->
                 if (showHide) applyShowFilterAnimation()
                 else applyHideFilterAnimation()
             }
@@ -124,7 +123,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             taskAdapter.submitList(tasks)
         })
 
-        taskViewModel.hideCompleted.observe(viewLifecycleOwner,{ hideCompleted->
+        taskViewModel.hideCompleted.observe(viewLifecycleOwner, { hideCompleted ->
             setCompletedChipText(hideCompleted)
         })
 
@@ -193,41 +192,47 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
     private fun setCompletedChipText(hideCompleted: Boolean) {
         binding.apply {
             chipHomeShowHideCompleted.apply {
-                if (hideCompleted){
+                if (hideCompleted) {
                     text = getString(R.string.show_completed_text)
-                    chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_completed_box)
+                    chipIcon =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_completed_box)
                 } else {
                     text = getString(R.string.hide_completed_text)
-                    chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_uncompleted_box)
+                    chipIcon =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_uncompleted_box)
                 }
             }
         }
-            binding.rvHomeTaskList.scrollToPosition(0)
+        binding.rvHomeTaskList.scrollToPosition(0)
     }
 
     private fun setChipIcons(sortOrder: SortOrder) {
-        when(sortOrder) {
+        when (sortOrder) {
             is SortOrder.DateOrder -> setDateChip(sortOrder.orderBy)
             is SortOrder.TitleOrder -> setTitleChip(sortOrder.orderBy)
         }
         binding.rvHomeTaskList.scrollToPosition(0)
     }
 
-    private fun setTitleChip(orderBy: OrderBy){
+    private fun setTitleChip(orderBy: OrderBy) {
         binding.apply {
             chipHomeDate.chipIcon = null
             if (orderBy == OrderBy.ASC)
-                chipHomeTitle.chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_ascending_arrow)
-            else chipHomeTitle.chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_descending_arrow)
+                chipHomeTitle.chipIcon =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_ascending_arrow)
+            else chipHomeTitle.chipIcon =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_descending_arrow)
         }
     }
 
-    private fun setDateChip(orderBy: OrderBy){
+    private fun setDateChip(orderBy: OrderBy) {
         binding.apply {
             chipHomeTitle.chipIcon = null
             if (orderBy == OrderBy.ASC)
-                chipHomeDate.chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_ascending_arrow)
-            else chipHomeDate.chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_descending_arrow)
+                chipHomeDate.chipIcon =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_ascending_arrow)
+            else chipHomeDate.chipIcon =
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_descending_arrow)
         }
     }
 

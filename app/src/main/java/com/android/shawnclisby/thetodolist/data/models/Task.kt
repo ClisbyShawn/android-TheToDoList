@@ -13,5 +13,5 @@ data class Task(
     val created: Long = System.currentTimeMillis()
 ) {
     val createdDateFormat: String
-    get() = DateFormat.getDateInstance(DateFormat.MEDIUM).format(created)
+        get() = DateFormat.getDateInstance(DateFormat.MEDIUM).format(created)
 }

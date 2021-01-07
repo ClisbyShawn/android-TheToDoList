@@ -14,21 +14,25 @@ class TaskRepository(application: Application) {
     private val database = TheListDatabase.getDatabase(application)
     private val taskDao: TaskDao = database.taskDao()
 
-    fun getTasks(query: String, hideCompleted: Boolean, order:SortOrder): Flow<List<Task>> {
+    fun getTasks(query: String, hideCompleted: Boolean, order: SortOrder): Flow<List<Task>> {
         return taskDao.getTasksFlow().map { tasks ->
             val filteredList = tasks.filter { task ->
                 if (hideCompleted)
-                task.title.toLowerCase().contains(query.toLowerCase()) && !task.completed
+                    task.title.toLowerCase().contains(query.toLowerCase()) && !task.completed
                 else task.title.toLowerCase().contains(query.toLowerCase())
             }
             val sortedList = ArrayList<Task>()
-            when(order) {
+            when (order) {
                 is SortOrder.DateOrder -> {
-                    if(order.orderBy == OrderBy.ASC)sortedList.addAll(ascendingByDate(filteredList))
+                    if (order.orderBy == OrderBy.ASC) sortedList.addAll(ascendingByDate(filteredList))
                     else sortedList.addAll(descendingByDate(filteredList))
                 }
                 is SortOrder.TitleOrder -> {
-                    if (order.orderBy == OrderBy.ASC) sortedList.addAll(ascendingByTitle(filteredList))
+                    if (order.orderBy == OrderBy.ASC) sortedList.addAll(
+                        ascendingByTitle(
+                            filteredList
+                        )
+                    )
                     else sortedList.addAll(descendingByTitle(filteredList))
                 }
             }
@@ -48,19 +52,19 @@ class TaskRepository(application: Application) {
         taskDao.deleteTask(task)
     }
 
-    private fun ascendingByTitle(tasks:List<Task>):List<Task> {
+    private fun ascendingByTitle(tasks: List<Task>): List<Task> {
         return tasks.sortedBy { it.title }
     }
 
-    private fun descendingByTitle(tasks:List<Task>):List<Task> {
+    private fun descendingByTitle(tasks: List<Task>): List<Task> {
         return tasks.sortedByDescending { it.title }
     }
 
-    private fun ascendingByDate(tasks: List<Task>):List<Task> {
+    private fun ascendingByDate(tasks: List<Task>): List<Task> {
         return tasks.sortedBy { it.created }
     }
 
-    private fun descendingByDate(tasks: List<Task>):List<Task> {
+    private fun descendingByDate(tasks: List<Task>): List<Task> {
         return tasks.sortedByDescending { it.created }
     }
 }

@@ -22,7 +22,7 @@ class TaskViewModel(application: Application) : ViewModel() {
     val hideCompleted: LiveData<Boolean> = _hideCompleted
 
     private val _sortOrder = MutableLiveData<SortOrder>(TitleOrder())
-    val sortOrder:LiveData<SortOrder> = _sortOrder
+    val sortOrder: LiveData<SortOrder> = _sortOrder
 
     private val flowList = combine(
         searchString.asFlow(),
@@ -35,7 +35,11 @@ class TaskViewModel(application: Application) : ViewModel() {
             "order" to order
         )
     }.flatMapLatest { map ->
-        taskRepository.getTasks(map["query"] as String, map["hide"] as Boolean, map["order"] as SortOrder)
+        taskRepository.getTasks(
+            map["query"] as String,
+            map["hide"] as Boolean,
+            map["order"] as SortOrder
+        )
     }
 
     val taskList = flowList.asLiveData()
@@ -63,7 +67,7 @@ class TaskViewModel(application: Application) : ViewModel() {
     }
 
     fun toggleTitleOrder() {
-        when(_sortOrder.value){
+        when (_sortOrder.value) {
             is DateOrder -> _sortOrder.value = TitleOrder()
             is TitleOrder -> {
                 if ((_sortOrder.value as TitleOrder).orderBy == OrderBy.ASC)
@@ -75,7 +79,7 @@ class TaskViewModel(application: Application) : ViewModel() {
     }
 
     fun toggleDateOrder() {
-        when(_sortOrder.value){
+        when (_sortOrder.value) {
             is DateOrder -> {
                 if ((_sortOrder.value as DateOrder).orderBy == OrderBy.ASC)
                     _sortOrder.value = DateOrder(OrderBy.DESC)

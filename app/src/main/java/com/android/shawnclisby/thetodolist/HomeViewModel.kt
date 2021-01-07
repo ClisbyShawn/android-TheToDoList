@@ -15,13 +15,13 @@ class HomeViewModel : ViewModel() {
     val filterContainer: LiveData<FilterContainer> = _filterContainer
 
     val onSearchToggled: () -> Unit = {
-            if (searchBar.value?.showHide == null || !searchBar.value?.showHide!!)
-                _searchBar.postValue(SearchBar(showHide = true))
-            else _searchBar.postValue(SearchBar(showHide = false))
+        if (searchBar.value?.showHide == null || !searchBar.value?.showHide!!)
+            _searchBar.postValue(SearchBar(showHide = true))
+        else _searchBar.postValue(SearchBar(showHide = false))
     }
 
     val onFilterToggled: () -> Unit = {
-        if(_filterContainer.value?.showHide == null || !_filterContainer.value?.showHide!!)
+        if (_filterContainer.value?.showHide == null || !_filterContainer.value?.showHide!!)
             _filterContainer.postValue(FilterContainer(showHide = true))
         else _filterContainer.postValue(FilterContainer(showHide = false))
     }
@@ -29,5 +29,5 @@ class HomeViewModel : ViewModel() {
 
 sealed class WidgetState {
     data class SearchBar(val showHide: Boolean? = null) : WidgetState()
-    data class FilterContainer(val showHide: Boolean? = null): WidgetState()
+    data class FilterContainer(val showHide: Boolean? = null) : WidgetState()
 }
