@@ -46,20 +46,23 @@ class TaskRecyclerAdapter(private val context: Context, private val interaction:
         RecyclerView.ViewHolder(itemBinding.root) {
 
         fun onBind(task: Task) {
-            itemBinding.tvItemTaskTitle.text = task.title
-            if (task.completed) {
-                itemBinding.chbxItemTask.isChecked = task.completed
-                itemBinding.tvItemTaskTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-            }
-            if (task.priority) itemBinding.ivItemTaskPriority.show() else itemBinding.ivItemTaskPriority.hide()
+            itemBinding.apply {
+                tvItemTaskTitle.text = task.title
+                tvItemTaskDate.text = "Created ${task.createdDateFormat}"
 
-            itemBinding.chbxItemTask.setOnCheckedChangeListener { _, isChecked ->
-                interaction?.onTaskCompletionChanged(task.id, isChecked)
-                if (isChecked) itemBinding.tvItemTaskTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                else itemBinding.tvItemTaskTitle.paintFlags = 0
-            }
+                if (task.completed) {
+                    chbxItemTask.isChecked = task.completed
+                    tvItemTaskTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                }
+                if (task.priority) ivItemTaskPriority.show() else ivItemTaskPriority.hide()
 
-            itemBinding.root.setOnClickListener { interaction?.onTaskItemClicked(task) }
+                chbxItemTask.setOnCheckedChangeListener { _, isChecked ->
+                    interaction?.onTaskCompletionChanged(task.id, isChecked)
+                    if (isChecked) tvItemTaskTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                    else tvItemTaskTitle.paintFlags = 0
+                }
+                root.setOnClickListener { interaction?.onTaskItemClicked(task) }
+            }
         }
     }
 
