@@ -9,11 +9,13 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
 import com.android.shawnclisby.thetodolist.data.TaskViewModel
+import com.android.shawnclisby.thetodolist.data.models.OrderBy
+import com.android.shawnclisby.thetodolist.data.models.SortOrder
 import com.android.shawnclisby.thetodolist.data.models.Task
 import com.android.shawnclisby.thetodolist.databinding.FragmentHomeBinding
 import com.android.shawnclisby.thetodolist.ui.TaskRecyclerAdapter
@@ -94,6 +96,14 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             chipHomeShowHideCompleted.setOnClickListener {
                 taskViewModel.toggleFilter()
             }
+
+            chipHomeTitle.setOnClickListener {
+                taskViewModel.toggleTitleOrder()
+            }
+
+            chipHomeDate.setOnClickListener {
+                taskViewModel.toggleDateOrder()
+            }
         }
 
         homeViewModel.searchBar.observe(viewLifecycleOwner, { searchBar ->
@@ -118,6 +128,10 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             setCompletedChipText(hideCompleted)
         })
 
+        taskViewModel.sortOrder.observe(viewLifecycleOwner, { sortOrder ->
+            setChipIcons(sortOrder)
+        })
+
         return binding.root
     }
 
@@ -138,6 +152,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         ).show()
     }
 
+    /* region View and Animation Logic */
     private fun applyShowSearchBarAnimation() {
         binding.apply {
             rvHomeTaskList.lowBounceStiffnessTranslationY(165f)
@@ -187,6 +202,34 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                 }
             }
         }
-
+            binding.rvHomeTaskList.scrollToPosition(0)
     }
+
+    private fun setChipIcons(sortOrder: SortOrder) {
+        when(sortOrder) {
+            is SortOrder.DateOrder -> setDateChip(sortOrder.orderBy)
+            is SortOrder.TitleOrder -> setTitleChip(sortOrder.orderBy)
+        }
+        binding.rvHomeTaskList.scrollToPosition(0)
+    }
+
+    private fun setTitleChip(orderBy: OrderBy){
+        binding.apply {
+            chipHomeDate.chipIcon = null
+            if (orderBy == OrderBy.ASC)
+                chipHomeTitle.chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_ascending_arrow)
+            else chipHomeTitle.chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_descending_arrow)
+        }
+    }
+
+    private fun setDateChip(orderBy: OrderBy){
+        binding.apply {
+            chipHomeTitle.chipIcon = null
+            if (orderBy == OrderBy.ASC)
+                chipHomeDate.chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_ascending_arrow)
+            else chipHomeDate.chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_descending_arrow)
+        }
+    }
+
+    /* endregion View and Animation Logic */
 }
