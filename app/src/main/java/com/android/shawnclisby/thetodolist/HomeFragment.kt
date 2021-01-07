@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
@@ -88,6 +90,10 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             fabHomeNewTask.setOnClickListener {
                //Navigate to Add/Edit Task Fragment
             }
+
+            chipHomeShowHideCompleted.setOnClickListener {
+                taskViewModel.toggleFilter()
+            }
         }
 
         homeViewModel.searchBar.observe(viewLifecycleOwner, { searchBar ->
@@ -106,6 +112,10 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
         taskViewModel.taskList.observe(viewLifecycleOwner, { tasks ->
             taskAdapter.submitList(tasks)
+        })
+
+        taskViewModel.hideCompleted.observe(viewLifecycleOwner,{ hideCompleted->
+            setCompletedChipText(hideCompleted)
         })
 
         return binding.root
@@ -151,8 +161,8 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
     private fun applyShowFilterAnimation() {
         binding.apply {
-            constraintHomeFilterContainer.animateByTranslationYAlphaShow((-60f).toDps(requireContext()))
-            bottomAppBar.animateByTranslationYAlphaShow((-59f).toDps(requireContext()))
+            constraintHomeFilterContainer.animateByTranslationYAlphaShow((-54f).toDps(requireContext()))
+            bottomAppBar.animateByTranslationYAlphaShow((-53f).toDps(requireContext()))
             viewHomeOverlay.show()
         }
     }
@@ -160,8 +170,23 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
     private fun applyHideFilterAnimation() {
         binding.apply {
             viewHomeOverlay.gone()
-            constraintHomeFilterContainer.animateByTranslationYAlphaHide(60f.toDps(requireContext()))
-            bottomAppBar.animateByTranslationYAlphaShow(60f.toDps(requireContext()))
+            constraintHomeFilterContainer.animateByTranslationYAlphaHide(54f.toDps(requireContext()))
+            bottomAppBar.animateByTranslationYAlphaShow(53f.toDps(requireContext()))
         }
+    }
+
+    private fun setCompletedChipText(hideCompleted: Boolean) {
+        binding.apply {
+            chipHomeShowHideCompleted.apply {
+                if (hideCompleted){
+                    text = getString(R.string.show_completed_text)
+                    chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_completed_box)
+                } else {
+                    text = getString(R.string.hide_completed_text)
+                    chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_uncompleted_box)
+                }
+            }
+        }
+
     }
 }
