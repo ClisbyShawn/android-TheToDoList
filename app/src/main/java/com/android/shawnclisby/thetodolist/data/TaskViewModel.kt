@@ -13,11 +13,12 @@ class TaskViewModel(application: Application) : ViewModel() {
         TaskRepository(application)
 
     val searchString = MutableLiveData("")
-    private val hideCompleted = MutableLiveData(false)
+    private val _hideCompleted = MutableLiveData(false)
+    val hideCompleted:LiveData<Boolean> = _hideCompleted
 
     private val flowList = combine(
         searchString.asFlow(),
-        hideCompleted.asFlow()
+        _hideCompleted.asFlow()
     ) { query, hide ->
         mapOf(
             "query" to query,
@@ -48,6 +49,6 @@ class TaskViewModel(application: Application) : ViewModel() {
     }
 
     fun toggleFilter() {
-        hideCompleted.value = !hideCompleted.value!!
+        _hideCompleted.value = !_hideCompleted.value!!
     }
 }

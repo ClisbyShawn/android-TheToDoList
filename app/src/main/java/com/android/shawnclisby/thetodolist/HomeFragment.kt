@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
@@ -15,9 +17,7 @@ import com.android.shawnclisby.thetodolist.data.TaskViewModel
 import com.android.shawnclisby.thetodolist.data.models.Task
 import com.android.shawnclisby.thetodolist.databinding.FragmentHomeBinding
 import com.android.shawnclisby.thetodolist.ui.TaskRecyclerAdapter
-import com.android.shawnclisby.thetodolist.util.hideKeyboard
-import com.android.shawnclisby.thetodolist.util.lowBounceStiffnessTranslationY
-import com.android.shawnclisby.thetodolist.util.showKeyboard
+import com.android.shawnclisby.thetodolist.util.*
 
 class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
@@ -60,7 +60,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                 setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.search -> {
-                            homeViewModel.onToggled.invoke()
+                            homeViewModel.onSearchToggled.invoke()
                             true
                         }
 
@@ -69,7 +69,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                 }
 
                 setNavigationOnClickListener {
-                    taskViewModel.toggleFilter()
+                    homeViewModel.onFilterToggled.invoke()
                 }
             }
 
@@ -80,7 +80,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        homeViewModel.onToggled.invoke()
+                        homeViewModel.onSearchToggled.invoke()
                         true
                     }
                     false
@@ -89,6 +89,10 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
             fabHomeNewTask.setOnClickListener {
                //Navigate to Add/Edit Task Fragment
+            }
+
+            chipHomeShowHideCompleted.setOnClickListener {
+                taskViewModel.toggleFilter()
             }
         }
 
@@ -99,8 +103,19 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             }
         })
 
+        homeViewModel.filterContainer.observe(viewLifecycleOwner, { filterContainer ->
+            filterContainer.showHide?.let { showHide->
+                if (showHide) applyShowFilterAnimation()
+                else applyHideFilterAnimation()
+            }
+        })
+
         taskViewModel.taskList.observe(viewLifecycleOwner, { tasks ->
             taskAdapter.submitList(tasks)
+        })
+
+        taskViewModel.hideCompleted.observe(viewLifecycleOwner,{ hideCompleted->
+            setCompletedChipText(hideCompleted)
         })
 
         return binding.root
@@ -142,5 +157,36 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             tilHomeSearch.lowBounceStiffnessTranslationY(-205f)
             tieHomeSearch.hideKeyboard(requireContext())
         }
+    }
+
+    private fun applyShowFilterAnimation() {
+        binding.apply {
+            constraintHomeFilterContainer.animateByTranslationYAlphaShow((-54f).toDps(requireContext()))
+            bottomAppBar.animateByTranslationYAlphaShow((-53f).toDps(requireContext()))
+            viewHomeOverlay.show()
+        }
+    }
+
+    private fun applyHideFilterAnimation() {
+        binding.apply {
+            viewHomeOverlay.gone()
+            constraintHomeFilterContainer.animateByTranslationYAlphaHide(54f.toDps(requireContext()))
+            bottomAppBar.animateByTranslationYAlphaShow(53f.toDps(requireContext()))
+        }
+    }
+
+    private fun setCompletedChipText(hideCompleted: Boolean) {
+        binding.apply {
+            chipHomeShowHideCompleted.apply {
+                if (hideCompleted){
+                    text = getString(R.string.show_completed_text)
+                    chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_completed_box)
+                } else {
+                    text = getString(R.string.hide_completed_text)
+                    chipIcon = ContextCompat.getDrawable(requireContext(),R.drawable.ic_uncompleted_box)
+                }
+            }
+        }
+
     }
 }

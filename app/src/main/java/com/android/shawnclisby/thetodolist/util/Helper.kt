@@ -15,6 +15,10 @@ fun View.hide() {
     this.visibility = View.INVISIBLE
 }
 
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
 fun View.show() {
     this.visibility = View.VISIBLE
 }
@@ -25,6 +29,14 @@ fun View.lowBounceStiffnessTranslationY(position: Float) {
         spring.stiffness = SpringForce.STIFFNESS_VERY_LOW
         start()
     }
+}
+
+fun View.animateByTranslationYAlphaShow(byPosition: Float) {
+    this.animate().translationYBy(byPosition).alpha(1f).start()
+}
+
+fun View.animateByTranslationYAlphaHide(byPosition: Float) {
+    this.animate().translationYBy(byPosition).alpha(0f).start()
 }
 
 fun Int.toDps(context: Context): Int {
