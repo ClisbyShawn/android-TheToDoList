@@ -1,6 +1,7 @@
 package com.android.shawnclisby.thetodolist.data
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import com.android.shawnclisby.thetodolist.data.models.OrderBy
 import com.android.shawnclisby.thetodolist.data.models.SortOrder
 import com.android.shawnclisby.thetodolist.data.models.Task
@@ -38,6 +39,10 @@ class TaskRepository(application: Application) {
             }
             sortedList.toList()
         }
+    }
+
+    fun getTask(id: Int): Flow<Task> {
+        return taskDao.getTask(id)
     }
 
     suspend fun insert(task: Task) {

@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
 import com.android.shawnclisby.thetodolist.data.TaskViewModel
@@ -28,19 +30,17 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
     private val binding get() = _binding!!
 
     private lateinit var authViewModel: AuthViewModel
-    private lateinit var taskViewModelFactory: TaskViewModelFactory
-    private lateinit var taskViewModel: TaskViewModel
+    private val taskViewModel: TaskViewModel by activityViewModels {
+        TaskViewModelFactory(
+            requireActivity().application
+        )
+    }
     private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         authViewModel = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
-
-        taskViewModelFactory = TaskViewModelFactory(requireActivity().application)
-        taskViewModel =
-            ViewModelProvider(this, taskViewModelFactory)
-                .get(TaskViewModel::class.java)
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
     }
 
@@ -91,7 +91,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             }
 
             fabHomeNewTask.setOnClickListener {
-                //Navigate to Add/Edit Task Fragment
+                navigateToTaskDetail()
             }
 
             chipHomeShowHideCompleted.setOnClickListener {
@@ -142,7 +142,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
     }
 
     override fun onTaskItemClicked(task: Task) {
-        Toast.makeText(requireContext(), "Clicked ${task.id}", Toast.LENGTH_SHORT).show()
+        navigateToTaskDetail(task)
     }
 
     override fun onTaskCompletionChanged(id: Int, checked: Boolean) {
@@ -153,7 +153,13 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         ).show()
     }
 
+    private fun navigateToTaskDetail(task: Task? = null) {
+        taskViewModel.taskDetail(task)
+        findNavController().navigate(R.id.action_homeFragment_to_addEditFragment)
+    }
+
     /* region View and Animation Logic */
+
     private fun applyShowSearchBarAnimation() {
         binding.apply {
             rvHomeTaskList.lowBounceStiffnessTranslationY(165f)

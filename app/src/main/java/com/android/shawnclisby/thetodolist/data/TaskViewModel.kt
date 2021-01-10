@@ -7,6 +7,7 @@ import com.android.shawnclisby.thetodolist.data.models.SortOrder
 import com.android.shawnclisby.thetodolist.data.models.SortOrder.DateOrder
 import com.android.shawnclisby.thetodolist.data.models.SortOrder.TitleOrder
 import com.android.shawnclisby.thetodolist.data.models.Task
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
@@ -15,6 +16,8 @@ class TaskViewModel(application: Application) : ViewModel() {
 
     private val taskRepository: TaskRepository =
         TaskRepository(application)
+
+    /* region Home Fragment Operations */
 
     val searchString = MutableLiveData("")
 
@@ -44,24 +47,6 @@ class TaskViewModel(application: Application) : ViewModel() {
 
     val taskList = flowList.asLiveData()
 
-    fun insert(task: Task) {
-        viewModelScope.launch {
-            taskRepository.insert(task)
-        }
-    }
-
-    fun update(task: Task) {
-        viewModelScope.launch {
-            taskRepository.update(task)
-        }
-    }
-
-    fun delete(task: Task) {
-        viewModelScope.launch {
-            taskRepository.delete(task)
-        }
-    }
-
     fun toggleFilter() {
         _hideCompleted.value = !_hideCompleted.value!!
     }
@@ -89,4 +74,41 @@ class TaskViewModel(application: Application) : ViewModel() {
             null -> _sortOrder.value = DateOrder()
         }
     }
+
+    /* endregion Home Fragment Operations */
+
+    /* region Add/Edit Fragment Operations */
+    var taskData: LiveData<Task?>? = null
+
+    fun taskDetail(task: Task?) {
+        taskData = MutableLiveData(task)
+    }
+
+    /* endregion Add/Edit Fragment Operations */
+
+    /* region Basic Operations */
+
+    fun insert(task: Task) {
+        viewModelScope.launch {
+            taskRepository.insert(task)
+        }
+    }
+
+    fun update(task: Task) {
+        viewModelScope.launch {
+            taskRepository.update(task)
+        }
+    }
+
+    fun delete(task: Task) {
+        viewModelScope.launch {
+            taskRepository.delete(task)
+        }
+    }
+
+    private fun getTaskBy(id: Int): Flow<Task> {
+        return taskRepository.getTask(id)
+    }
+
+    /* endregion Basic Operations */
 }
