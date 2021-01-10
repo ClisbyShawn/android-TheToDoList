@@ -18,4 +18,6 @@
     <string name="search_hint_label">Search...</string>
     <string name="show_completed_text">Show Completed</string>
     <string name="hide_completed_text">Hide Completed</string>
+    <string name="hint_task_title">Title</string>
+    <string name="add_edit_priority_title">Priority</string>
 </resources>
