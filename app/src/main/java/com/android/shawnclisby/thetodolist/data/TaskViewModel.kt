@@ -7,6 +7,7 @@ import com.android.shawnclisby.thetodolist.data.models.SortOrder
 import com.android.shawnclisby.thetodolist.data.models.SortOrder.DateOrder
 import com.android.shawnclisby.thetodolist.data.models.SortOrder.TitleOrder
 import com.android.shawnclisby.thetodolist.data.models.Task
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
@@ -16,13 +17,15 @@ class TaskViewModel(application: Application) : ViewModel() {
     private val taskRepository: TaskRepository =
         TaskRepository(application)
 
+    /* region Home Fragment Operations */
+
     val searchString = MutableLiveData("")
 
     private val _hideCompleted = MutableLiveData(false)
     val hideCompleted: LiveData<Boolean> = _hideCompleted
 
     private val _sortOrder = MutableLiveData<SortOrder>(TitleOrder())
-    val sortOrder:LiveData<SortOrder> = _sortOrder
+    val sortOrder: LiveData<SortOrder> = _sortOrder
 
     private val flowList = combine(
         searchString.asFlow(),
@@ -35,10 +38,55 @@ class TaskViewModel(application: Application) : ViewModel() {
             "order" to order
         )
     }.flatMapLatest { map ->
-        taskRepository.getTasks(map["query"] as String, map["hide"] as Boolean, map["order"] as SortOrder)
+        taskRepository.getTasks(
+            map["query"] as String,
+            map["hide"] as Boolean,
+            map["order"] as SortOrder
+        )
     }
 
     val taskList = flowList.asLiveData()
+
+    fun toggleFilter() {
+        _hideCompleted.value = !_hideCompleted.value!!
+    }
+
+    fun toggleTitleOrder() {
+        when (_sortOrder.value) {
+            is DateOrder -> _sortOrder.value = TitleOrder()
+            is TitleOrder -> {
+                if ((_sortOrder.value as TitleOrder).orderBy == OrderBy.ASC)
+                    _sortOrder.value = TitleOrder(OrderBy.DESC)
+                else _sortOrder.value = TitleOrder()
+            }
+            null -> _sortOrder.value = TitleOrder()
+        }
+    }
+
+    fun toggleDateOrder() {
+        when (_sortOrder.value) {
+            is DateOrder -> {
+                if ((_sortOrder.value as DateOrder).orderBy == OrderBy.ASC)
+                    _sortOrder.value = DateOrder(OrderBy.DESC)
+                else _sortOrder.value = DateOrder()
+            }
+            is TitleOrder -> _sortOrder.value = DateOrder()
+            null -> _sortOrder.value = DateOrder()
+        }
+    }
+
+    /* endregion Home Fragment Operations */
+
+    /* region Add/Edit Fragment Operations */
+    var taskData: LiveData<Task?>? = null
+
+    fun taskDetail(task: Task?) {
+        taskData = MutableLiveData(task)
+    }
+
+    /* endregion Add/Edit Fragment Operations */
+
+    /* region Basic Operations */
 
     fun insert(task: Task) {
         viewModelScope.launch {
@@ -58,31 +106,9 @@ class TaskViewModel(application: Application) : ViewModel() {
         }
     }
 
-    fun toggleFilter() {
-        _hideCompleted.value = !_hideCompleted.value!!
+    private fun getTaskBy(id: Int): Flow<Task> {
+        return taskRepository.getTask(id)
     }
 
-    fun toggleTitleOrder() {
-        when(_sortOrder.value){
-            is DateOrder -> _sortOrder.value = TitleOrder()
-            is TitleOrder -> {
-                if ((_sortOrder.value as TitleOrder).orderBy == OrderBy.ASC)
-                    _sortOrder.value = TitleOrder(OrderBy.DESC)
-                else _sortOrder.value = TitleOrder()
-            }
-            null -> _sortOrder.value = TitleOrder()
-        }
-    }
-
-    fun toggleDateOrder() {
-        when(_sortOrder.value){
-            is DateOrder -> {
-                if ((_sortOrder.value as DateOrder).orderBy == OrderBy.ASC)
-                    _sortOrder.value = DateOrder(OrderBy.DESC)
-                else _sortOrder.value = DateOrder()
-            }
-            is TitleOrder -> _sortOrder.value = DateOrder()
-            null -> _sortOrder.value = DateOrder()
-        }
-    }
+    /* endregion Basic Operations */
 }
