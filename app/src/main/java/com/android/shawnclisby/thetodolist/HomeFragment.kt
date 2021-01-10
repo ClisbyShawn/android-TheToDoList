@@ -13,10 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
 import com.android.shawnclisby.thetodolist.data.TaskViewModel
+import com.android.shawnclisby.thetodolist.data.TaskViewModelFactory
 import com.android.shawnclisby.thetodolist.data.models.OrderBy
 import com.android.shawnclisby.thetodolist.data.models.SortOrder
 import com.android.shawnclisby.thetodolist.data.models.Task
 import com.android.shawnclisby.thetodolist.databinding.FragmentHomeBinding
+import com.android.shawnclisby.thetodolist.ui.HomeViewModel
 import com.android.shawnclisby.thetodolist.ui.TaskRecyclerAdapter
 import com.android.shawnclisby.thetodolist.util.*
 

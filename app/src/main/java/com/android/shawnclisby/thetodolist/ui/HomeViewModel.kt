@@ -1,10 +1,10 @@
-package com.android.shawnclisby.thetodolist
+package com.android.shawnclisby.thetodolist.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.android.shawnclisby.thetodolist.WidgetState.FilterContainer
-import com.android.shawnclisby.thetodolist.WidgetState.SearchBar
+import com.android.shawnclisby.thetodolist.ui.WidgetState.FilterContainer
+import com.android.shawnclisby.thetodolist.ui.WidgetState.SearchBar
 
 class HomeViewModel : ViewModel() {
 
