@@ -20,4 +20,5 @@
     <string name="hide_completed_text">Hide Completed</string>
     <string name="hint_task_title">Title</string>
     <string name="add_edit_priority_title">Priority</string>
+    <string name="hint_task_description">Description</string>
 </resources>

@@ -21,19 +21,27 @@
             android:id="@+id/tie_add_edit_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textCapWords"
             android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switch_add_edit_priority"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_add_edit_description"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/add_edit_priority_title"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_add_edit_title"
-        app:switchPadding="4dp" />
+        android:hint="@string/hint_task_description"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:layout_constraintTop_toBottomOf="@id/til_add_edit_title">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tie_add_edit_description"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:inputType="text|textMultiLine" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
