@@ -31,7 +31,6 @@ class AddEditFragment : Fragment() {
             taskViewModel.taskData?.observe(viewLifecycleOwner) { task->
                 task?.let { editTask->
                     tieAddEditTitle.setText(editTask.title)
-                    switchAddEditPriority.isChecked = editTask.priority
                 }
             }
         }

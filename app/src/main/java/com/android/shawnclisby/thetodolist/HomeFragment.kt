@@ -183,8 +183,8 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
     private fun applyShowFilterAnimation() {
         binding.apply {
-            constraintHomeFilterContainer.animateByTranslationYAlphaShow((-54f).toDps(requireContext()))
-            bottomAppBar.animateByTranslationYAlphaShow((-53f).toDps(requireContext()))
+            constraintHomeFilterContainer.lowBounceStiffnessTranslationY(0f.toDps(requireContext()))
+            bottomAppBar.lowBounceStiffnessTranslationY((-56f).toDps(requireContext()))
             viewHomeOverlay.show()
         }
     }
@@ -192,8 +192,8 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
     private fun applyHideFilterAnimation() {
         binding.apply {
             viewHomeOverlay.gone()
-            constraintHomeFilterContainer.animateByTranslationYAlphaHide(54f.toDps(requireContext()))
-            bottomAppBar.animateByTranslationYAlphaShow(53f.toDps(requireContext()))
+            constraintHomeFilterContainer.lowBounceStiffnessTranslationY(56f.toDps(requireContext()))
+            bottomAppBar.lowBounceStiffnessTranslationY(0f.toDps(requireContext()))
         }
     }
 

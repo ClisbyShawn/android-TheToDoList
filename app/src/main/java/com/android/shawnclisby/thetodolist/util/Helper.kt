@@ -31,14 +31,6 @@ fun View.lowBounceStiffnessTranslationY(position: Float) {
     }
 }
 
-fun View.animateByTranslationYAlphaShow(byPosition: Float) {
-    this.animate().translationYBy(byPosition).alpha(1f).start()
-}
-
-fun View.animateByTranslationYAlphaHide(byPosition: Float) {
-    this.animate().translationYBy(byPosition).alpha(0f).start()
-}
-
 fun Int.toDps(context: Context): Int {
     val resources = context.resources
     return TypedValue.applyDimension(
