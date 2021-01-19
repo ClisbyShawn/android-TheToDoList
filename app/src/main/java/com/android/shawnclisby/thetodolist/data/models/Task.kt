@@ -10,8 +10,12 @@ data class Task(
     var title: String,
     var priority: Boolean = false,
     var completed: Boolean = false,
-    val created: Long = System.currentTimeMillis()
+    val created: Long = System.currentTimeMillis(),
+    val dueDate: Long? = null
 ) {
     val createdDateFormat: String
         get() = DateFormat.getDateInstance(DateFormat.MEDIUM).format(created)
+
+    val dueDateFormat: String?
+        get() = DateFormat.getDateInstance(DateFormat.MEDIUM).format(dueDate)
 }
