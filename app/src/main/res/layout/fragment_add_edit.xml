@@ -56,4 +56,13 @@
         android:layout_marginTop="8dp"
         android:text="@string/add_edit_priority_title"/>
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_add_edit_due_date"
+        app:layout_constraintTop_toBottomOf="@id/chkbx_add_edit_priority"
+        app:layout_constraintStart_toStartOf="@id/til_add_edit_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

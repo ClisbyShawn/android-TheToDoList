@@ -33,6 +33,7 @@ class AddEditFragment : Fragment() {
                 task?.let { editTask ->
                     tieAddEditTitle.setText(editTask.title)
                     chkbxAddEditPriority.isChecked = editTask.priority
+                    editTask.dueDate?.let { tvAddEditDueDate.text = editTask.dueDateFormat}
                 }
             }
 
