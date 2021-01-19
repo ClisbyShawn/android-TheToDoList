@@ -48,7 +48,7 @@ class TaskRecyclerAdapter(private val context: Context, private val interaction:
         fun onBind(task: Task) {
             itemBinding.apply {
                 tvItemTaskTitle.text = task.title
-                tvItemTaskDate.text = "Created ${task.createdDateFormat}"
+                tvItemTaskDate.text = "${task.createdDateFormat}"
 
                 if (task.completed) {
                     chbxItemTask.isChecked = task.completed
@@ -57,7 +57,8 @@ class TaskRecyclerAdapter(private val context: Context, private val interaction:
                 if (task.priority) ivItemTaskPriority.show() else ivItemTaskPriority.hide()
 
                 chbxItemTask.setOnCheckedChangeListener { _, isChecked ->
-                    interaction?.onTaskCompletionChanged(task.id, isChecked)
+                    task.completed = isChecked
+                    interaction?.onTaskCompletionChanged(task)
                     if (isChecked) tvItemTaskTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                     else tvItemTaskTitle.paintFlags = 0
                 }
@@ -69,6 +70,6 @@ class TaskRecyclerAdapter(private val context: Context, private val interaction:
     interface TaskInteraction {
         fun onTaskItemClicked(task: Task)
 
-        fun onTaskCompletionChanged(id: Int, checked: Boolean)
+        fun onTaskCompletionChanged(task: Task)
     }
 }

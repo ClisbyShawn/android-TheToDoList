@@ -7,9 +7,9 @@ import java.text.DateFormat
 @Entity(tableName = "tasks")
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val title: String,
-    val priority: Boolean = false,
-    val completed: Boolean = false,
+    var title: String,
+    var priority: Boolean = false,
+    var completed: Boolean = false,
     val created: Long = System.currentTimeMillis()
 ) {
     val createdDateFormat: String

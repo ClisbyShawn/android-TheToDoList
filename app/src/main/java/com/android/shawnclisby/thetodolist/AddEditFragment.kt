@@ -28,13 +28,15 @@ class AddEditFragment : Fragment() {
         _binding = FragmentAddEditBinding.inflate(inflater, container, false)
 
         binding.apply {
-            taskViewModel.taskData?.observe(viewLifecycleOwner) { task->
-                task?.let { editTask->
+
+            taskViewModel.taskData?.observe(viewLifecycleOwner) { task ->
+                task?.let { editTask ->
                     tieAddEditTitle.setText(editTask.title)
+                    chkbxAddEditPriority.isChecked = editTask.priority
                 }
             }
-        }
 
+        }
         return binding.root
     }
 

@@ -78,15 +78,17 @@ class TaskViewModel(application: Application) : ViewModel() {
     /* endregion Home Fragment Operations */
 
     /* region Add/Edit Fragment Operations */
-    var taskData: LiveData<Task?>? = null
+
+    private var _taskData:MutableLiveData<Task?> = MutableLiveData(null)
+    var taskData: LiveData<Task?>? = _taskData
 
     fun taskDetail(task: Task?) {
-        taskData = MutableLiveData(task)
+        _taskData.value = task
     }
 
     /* endregion Add/Edit Fragment Operations */
 
-    /* region Basic Operations */
+    /* region Basic Database Operations */
 
     fun insert(task: Task) {
         viewModelScope.launch {
@@ -110,5 +112,5 @@ class TaskViewModel(application: Application) : ViewModel() {
         return taskRepository.getTask(id)
     }
 
-    /* endregion Basic Operations */
+    /* endregion Basic Database Operations */
 }

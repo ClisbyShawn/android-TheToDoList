@@ -22,7 +22,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapWords"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/tie_add_edit_description"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -34,14 +36,24 @@
         android:hint="@string/hint_task_description"
         app:hintAnimationEnabled="true"
         app:hintEnabled="true"
-        app:layout_constraintTop_toBottomOf="@id/til_add_edit_title">
+        app:layout_constraintTop_toBottomOf="@id/til_add_edit_title"
+        android:layout_marginTop="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tie_add_edit_description"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:inputType="text|textMultiLine" />
+            android:inputType="textCapSentences"
+            android:imeOptions="actionDone"/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/chkbx_add_edit_priority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/til_add_edit_description"
+        android:layout_marginTop="8dp"
+        android:text="@string/add_edit_priority_title"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

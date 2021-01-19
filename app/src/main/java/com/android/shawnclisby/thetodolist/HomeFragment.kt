@@ -145,12 +145,8 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         navigateToTaskDetail(task)
     }
 
-    override fun onTaskCompletionChanged(id: Int, checked: Boolean) {
-        Toast.makeText(
-            requireContext(),
-            "Clicked ${id}, completion:${checked}",
-            Toast.LENGTH_SHORT
-        ).show()
+    override fun onTaskCompletionChanged(task: Task) {
+        taskViewModel.update(task)
     }
 
     private fun navigateToTaskDetail(task: Task? = null) {
