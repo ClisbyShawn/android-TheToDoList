@@ -7,11 +7,16 @@ import java.text.DateFormat
 @Entity(tableName = "tasks")
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val title: String,
-    val priority: Boolean = false,
-    val completed: Boolean = false,
-    val created: Long = System.currentTimeMillis()
+    var title: String,
+    var description: String,
+    var priority: Boolean = false,
+    var completed: Boolean = false,
+    val created: Long = System.currentTimeMillis(),
+    var dueDate: Long? = null
 ) {
     val createdDateFormat: String
         get() = DateFormat.getDateInstance(DateFormat.MEDIUM).format(created)
+
+    val dueDateFormat: String?
+        get() = DateFormat.getDateInstance(DateFormat.MEDIUM).format(dueDate)
 }
