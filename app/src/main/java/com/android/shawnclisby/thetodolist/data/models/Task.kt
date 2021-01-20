@@ -8,10 +8,11 @@ import java.text.DateFormat
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var title: String,
+    var description: String,
     var priority: Boolean = false,
     var completed: Boolean = false,
     val created: Long = System.currentTimeMillis(),
-    val dueDate: Long? = null
+    var dueDate: Long? = null
 ) {
     val createdDateFormat: String
         get() = DateFormat.getDateInstance(DateFormat.MEDIUM).format(created)

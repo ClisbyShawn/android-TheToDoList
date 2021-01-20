@@ -79,18 +79,44 @@ class TaskViewModel(application: Application) : ViewModel() {
 
     /* region Add/Edit Fragment Operations */
 
-    private var _taskData:MutableLiveData<Task?> = MutableLiveData(null)
-    var taskData: LiveData<Task?>? = _taskData
+    private var _taskData: MutableLiveData<Task?> = MutableLiveData(null)
+    var taskData: LiveData<Task?> = _taskData
+
+    private var dateInMillis: Long? = null
 
     fun taskDetail(task: Task?) {
         _taskData.value = task
+    }
+
+    fun saveEditTask(title: String, description: String, priority: Boolean) {
+        if (taskData.value == null) insert(
+            Task(
+                title = title,
+                description = description,
+                priority = priority,
+                dueDate = dateInMillis
+            )
+        ) else {
+            taskData.value?.apply {
+                this.title = title
+                this.description = description
+                this.priority = priority
+                this.dueDate = dateInMillis
+                update(this)
+            }
+        }
+        dateInMillis = null
+    }
+
+    fun updateDate(timeInMillis: Long) {
+        dateInMillis = timeInMillis
     }
 
     /* endregion Add/Edit Fragment Operations */
 
     /* region Basic Database Operations */
 
-    fun insert(task: Task) {
+    private fun insert(task: Task) {
         viewModelScope.launch {
             taskRepository.insert(task)
         }
