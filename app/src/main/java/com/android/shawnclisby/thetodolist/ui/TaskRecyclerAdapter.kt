@@ -37,10 +37,14 @@ class TaskRecyclerAdapter(private val context: Context, private val interaction:
                 tvItemTaskTitle.text = task.title
                 tvItemTaskDate.text = task.createdDateFormat
 
-                if (task.completed) {
-                    chbxItemTask.isChecked = task.completed
-                    tvItemTaskTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                }
+                //Clear the unchecked Listener reference to issue #58
+                chbxItemTask.setOnCheckedChangeListener(null)
+                chbxItemTask.isChecked = task.completed
+
+                //Explicit call to clear or keep the strike through text reference to issue #58
+                if (task.completed) tvItemTaskTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                 else tvItemTaskTitle.paintFlags = 0
+
                 if (task.priority) ivItemTaskPriority.show() else ivItemTaskPriority.hide()
 
                 task.dueDate?.let { ivItemTaskDueDate.show() }
