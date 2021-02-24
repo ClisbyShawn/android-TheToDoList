@@ -122,6 +122,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         })
 
         taskViewModel.taskList.observe(viewLifecycleOwner, { tasks ->
+            homeViewModel.isListEmpty(tasks.size)
             taskAdapter.submitList(tasks)
         })
 
@@ -131,6 +132,11 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
         taskViewModel.sortOrder.observe(viewLifecycleOwner, { sortOrder ->
             setChipIcons(sortOrder)
+        })
+
+        homeViewModel.emptyList.observe(viewLifecycleOwner, { listIsEmpty->
+            if (listIsEmpty) binding.tvHomeEmptyText.show()
+            else binding.tvHomeEmptyText.gone()
         })
 
         return binding.root
