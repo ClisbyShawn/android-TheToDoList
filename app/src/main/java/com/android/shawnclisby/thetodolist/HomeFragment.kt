@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -85,8 +84,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         homeViewModel.onSearchToggled.invoke()
                         true
-                    }
-                    false
+                    } else false
                 }
             }
 
@@ -134,7 +132,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
             setChipIcons(sortOrder)
         })
 
-        homeViewModel.emptyList.observe(viewLifecycleOwner, { listIsEmpty->
+        homeViewModel.emptyList.observe(viewLifecycleOwner, { listIsEmpty ->
             if (listIsEmpty) binding.tvHomeEmptyText.show()
             else binding.tvHomeEmptyText.gone()
         })

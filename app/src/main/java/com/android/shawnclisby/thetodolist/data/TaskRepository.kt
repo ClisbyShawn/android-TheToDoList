@@ -1,7 +1,6 @@
 package com.android.shawnclisby.thetodolist.data
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import com.android.shawnclisby.thetodolist.data.models.OrderBy
 import com.android.shawnclisby.thetodolist.data.models.SortOrder
 import com.android.shawnclisby.thetodolist.data.models.Task
@@ -9,6 +8,8 @@ import com.android.shawnclisby.thetodolist.data.room.TaskDao
 import com.android.shawnclisby.thetodolist.data.room.TheListDatabase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TaskRepository(application: Application) {
 
@@ -19,8 +20,10 @@ class TaskRepository(application: Application) {
         return taskDao.getTasksFlow().map { tasks ->
             val filteredList = tasks.filter { task ->
                 if (hideCompleted)
-                    task.title.toLowerCase().contains(query.toLowerCase()) && !task.completed
-                else task.title.toLowerCase().contains(query.toLowerCase())
+                    task.title.toLowerCase(Locale.getDefault())
+                        .contains(query.toLowerCase(Locale.getDefault())) && !task.completed
+                else task.title.toLowerCase(Locale.getDefault())
+                    .contains(query.toLowerCase(Locale.getDefault()))
             }
             val sortedList = ArrayList<Task>()
             when (order) {
