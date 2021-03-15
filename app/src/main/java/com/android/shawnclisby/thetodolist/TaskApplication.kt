@@ -4,7 +4,7 @@ import android.app.Application
 import com.android.shawnclisby.androidauth.network.AuthHTTP
 import com.android.shawnclisby.androidauth.network.TokenEntry
 
-class App : Application() {
+class TaskApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
