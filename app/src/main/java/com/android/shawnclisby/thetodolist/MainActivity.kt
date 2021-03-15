@@ -5,10 +5,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.android.shawnclisby.androidauth.network.TokenEntry
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
+import com.android.shawnclisby.androidauth.viewModels.AuthViewModel.AuthEvent.LoginError
+import com.android.shawnclisby.androidauth.viewModels.AuthViewModel.AuthEvent.LoginSuccess
+import kotlinx.coroutines.flow.collect
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,17 +30,21 @@ class MainActivity : AppCompatActivity() {
 
         val navController = navController()
 
-        authViewModel.token.observe(this, { response ->
-            response.data?.let { authToken ->
-                TokenEntry.onToken(authToken)
-                navController.navigate(R.id.action_loginFragment_to_homeFragment)
-                authViewModel.me()
+        lifecycleScope.launchWhenStarted {
+            authViewModel.authFlow.collect { status ->
+                when (status) {
+                    is LoginSuccess -> navController.navigate(R.id.action_loginFragment_to_homeFragment)
+                    //TODO: Remove Toast Message
+                    is LoginError -> Toast.makeText(
+                        this@MainActivity,
+                        status.errorMessage,
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
             }
+        }
 
-            response.message?.let { errorMessage ->
-                Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-            }
-        })
     }
 
     private fun navController(): NavController {

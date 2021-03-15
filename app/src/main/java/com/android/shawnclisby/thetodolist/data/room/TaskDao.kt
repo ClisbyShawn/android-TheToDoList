@@ -1,6 +1,5 @@
 package com.android.shawnclisby.thetodolist.data.room
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.android.shawnclisby.thetodolist.data.models.Task
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +11,7 @@ interface TaskDao {
     fun getTasksFlow(): Flow<List<Task>>
 
     @Query("SELECT * FROM tasks WHERE id=:id")
-    fun getTask(id:Int): Flow<Task>
+    fun getTask(id: Int): Flow<Task>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTask(task: Task)

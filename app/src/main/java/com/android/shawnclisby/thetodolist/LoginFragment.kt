@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
 import com.android.shawnclisby.thetodolist.databinding.FragmentLoginBinding
@@ -14,6 +14,7 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private val authViewModel: AuthViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,9 +22,9 @@ class LoginFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        val authViewModel = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
 
         binding.buttonLoginSignIn.setOnClickListener {
+            //TODO: Remove String literals for constants
 //            authViewModel.login(
 //                mapOf(
 //                    "email" to binding.tieLoginEmail.text.toString().trim(),

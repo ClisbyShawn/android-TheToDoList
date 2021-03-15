@@ -15,7 +15,7 @@ class HomeViewModel : ViewModel() {
     val filterContainer: LiveData<FilterContainer> = _filterContainer
 
     private var _emptyList = MutableLiveData(false)
-    val emptyList:LiveData<Boolean> = _emptyList
+    val emptyList: LiveData<Boolean> = _emptyList
 
     val onSearchToggled: () -> Unit = {
         if (searchBar.value?.showHide == null || !searchBar.value?.showHide!!)
