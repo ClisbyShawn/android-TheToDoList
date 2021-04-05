@@ -12,6 +12,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
+private const val QUERY_KEY = "query"
+private const val HIDE_KEY = "hide"
+private const val ORDER_KEY = "order"
+
 class TaskViewModel(application: Application) : ViewModel() {
 
     private val taskRepository: TaskRepository =
@@ -29,19 +33,19 @@ class TaskViewModel(application: Application) : ViewModel() {
 
     private val flowList = combine(
         searchString.asFlow(),
-        _hideCompleted.asFlow(),
-        _sortOrder.asFlow()
+        hideCompleted.asFlow(),
+        sortOrder.asFlow()
     ) { query, hide, order ->
         mapOf(
-            "query" to query,
-            "hide" to hide,
-            "order" to order
+            QUERY_KEY to query,
+            HIDE_KEY to hide,
+            ORDER_KEY to order
         )
     }.flatMapLatest { map ->
         taskRepository.getTasks(
-            map["query"] as String,
-            map["hide"] as Boolean,
-            map["order"] as SortOrder
+            map[QUERY_KEY] as String,
+            map[HIDE_KEY] as Boolean,
+            map[ORDER_KEY] as SortOrder
         )
     }
 
@@ -106,6 +110,7 @@ class TaskViewModel(application: Application) : ViewModel() {
             }
         }
         dateInMillis = null
+        _taskData.value = null
     }
 
     fun updateDate(timeInMillis: Long) {

@@ -12,8 +12,11 @@ import com.android.shawnclisby.thetodolist.ui.TaskRecyclerAdapter.TaskViewHolder
 import com.android.shawnclisby.thetodolist.util.hide
 import com.android.shawnclisby.thetodolist.util.show
 
-class TaskRecyclerAdapter(private val context: Context, private val interaction: TaskInteraction?) :
+class TaskRecyclerAdapter(private val context: Context) :
     ListAdapter<Task, TaskViewHolder>(TaskDiffCallBack()) {
+
+    var onTaskCompletionChanged: ((Task) -> Unit)? = null
+    var onTaskItemClicked: ((Task) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         return TaskViewHolder(
@@ -51,18 +54,13 @@ class TaskRecyclerAdapter(private val context: Context, private val interaction:
 
                 chbxItemTask.setOnCheckedChangeListener { _, isChecked ->
                     task.completed = isChecked
-                    interaction?.onTaskCompletionChanged(task)
+                    onTaskCompletionChanged?.invoke(task)
                     if (isChecked) tvItemTaskTitle.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
                     else tvItemTaskTitle.paintFlags = 0
                 }
 
-                root.setOnClickListener { interaction?.onTaskItemClicked(task) }
+                root.setOnClickListener { onTaskItemClicked?.invoke(task) }
             }
         }
-    }
-
-    interface TaskInteraction {
-        fun onTaskItemClicked(task: Task)
-        fun onTaskCompletionChanged(task: Task)
     }
 }

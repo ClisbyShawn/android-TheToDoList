@@ -12,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
 import com.android.shawnclisby.thetodolist.data.TaskViewModel
 import com.android.shawnclisby.thetodolist.data.TaskViewModelFactory
 import com.android.shawnclisby.thetodolist.data.models.OrderBy
@@ -23,34 +22,38 @@ import com.android.shawnclisby.thetodolist.ui.HomeViewModel
 import com.android.shawnclisby.thetodolist.ui.TaskRecyclerAdapter
 import com.android.shawnclisby.thetodolist.util.*
 
-class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
+class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var authViewModel: AuthViewModel
     private val taskViewModel: TaskViewModel by activityViewModels {
         TaskViewModelFactory(
             requireActivity().application
         )
     }
-    private lateinit var homeViewModel: HomeViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        authViewModel = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-    }
+    private lateinit var homeFragmentViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        homeFragmentViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        val taskAdapter = TaskRecyclerAdapter(requireContext(), this)
+        /*region - TaskAdapter */
+        val taskAdapter = TaskRecyclerAdapter(requireContext())
 
+        taskAdapter.onTaskItemClicked = { task ->
+            navigateToTaskDetail(task)
+        }
+
+        taskAdapter.onTaskCompletionChanged = { task ->
+            taskViewModel.update(task)
+        }
+        /*endregion - TaskAdapter */
+
+        /*region - Binding */
         binding.apply {
 
             rvHomeTaskList.apply {
@@ -62,7 +65,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                 setOnMenuItemClickListener { menuItem ->
                     when (menuItem.itemId) {
                         R.id.search -> {
-                            homeViewModel.onSearchToggled.invoke()
+                            homeFragmentViewModel.onSearchToggled.invoke()
                             true
                         }
 
@@ -71,7 +74,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                 }
 
                 setNavigationOnClickListener {
-                    homeViewModel.onFilterToggled.invoke()
+                    homeFragmentViewModel.onFilterToggled.invoke()
                 }
             }
 
@@ -82,7 +85,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
 
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        homeViewModel.onSearchToggled.invoke()
+                        homeFragmentViewModel.onSearchToggled.invoke()
                         true
                     } else false
                 }
@@ -104,23 +107,32 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
                 taskViewModel.toggleDateOrder()
             }
         }
+        /* endregion - Binding */
 
-        homeViewModel.searchBar.observe(viewLifecycleOwner, { searchBar ->
+        /* region - HomeFragmentViewModel */
+        homeFragmentViewModel.searchBar.observe(viewLifecycleOwner, { searchBar ->
             searchBar.showHide?.let { showHide ->
                 if (showHide) applyShowSearchBarAnimation()
                 else applyHideSearchBarAnimation()
             }
         })
 
-        homeViewModel.filterContainer.observe(viewLifecycleOwner, { filterContainer ->
+        homeFragmentViewModel.filterContainer.observe(viewLifecycleOwner, { filterContainer ->
             filterContainer.showHide?.let { showHide ->
                 if (showHide) applyShowFilterAnimation()
                 else applyHideFilterAnimation()
             }
         })
 
+        homeFragmentViewModel.emptyList.observe(viewLifecycleOwner, { listIsEmpty ->
+            if (listIsEmpty) binding.tvHomeEmptyText.show()
+            else binding.tvHomeEmptyText.gone()
+        })
+        /* endregion - HomeFragmentViewModel */
+
+        /* region - TaskViewModel */
         taskViewModel.taskList.observe(viewLifecycleOwner, { tasks ->
-            homeViewModel.isListEmpty(tasks.size)
+            homeFragmentViewModel.isListEmpty(tasks.size)
             taskAdapter.submitList(tasks)
         })
 
@@ -131,11 +143,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         taskViewModel.sortOrder.observe(viewLifecycleOwner, { sortOrder ->
             setChipIcons(sortOrder)
         })
-
-        homeViewModel.emptyList.observe(viewLifecycleOwner, { listIsEmpty ->
-            if (listIsEmpty) binding.tvHomeEmptyText.show()
-            else binding.tvHomeEmptyText.gone()
-        })
+        /* endregion - TaskViewModel */
 
         return binding.root
     }
@@ -145,21 +153,12 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
         _binding = null
     }
 
-    override fun onTaskItemClicked(task: Task) {
-        navigateToTaskDetail(task)
-    }
-
-    override fun onTaskCompletionChanged(task: Task) {
-        taskViewModel.update(task)
-    }
-
     private fun navigateToTaskDetail(task: Task? = null) {
         taskViewModel.taskDetail(task)
         findNavController().navigate(R.id.action_homeFragment_to_addEditFragment)
     }
 
     /* region View and Animation Logic */
-
     private fun applyShowSearchBarAnimation() {
         binding.apply {
             rvHomeTaskList.lowBounceStiffnessTranslationY(165f)
@@ -176,7 +175,7 @@ class HomeFragment : Fragment(), TaskRecyclerAdapter.TaskInteraction {
     private fun applyHideSearchBarAnimation() {
         binding.apply {
             rvHomeTaskList.lowBounceStiffnessTranslationY(0f)
-            tilHomeSearch.lowBounceStiffnessTranslationY(-205f)
+            tilHomeSearch.lowBounceStiffnessTranslationY(-215f)
             tieHomeSearch.hideKeyboard(requireContext())
         }
     }
