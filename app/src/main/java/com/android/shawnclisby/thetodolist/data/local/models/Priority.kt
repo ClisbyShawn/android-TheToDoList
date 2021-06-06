@@ -1,4 +1,4 @@
-package com.android.shawnclisby.thetodolist.data.models
+package com.android.shawnclisby.thetodolist.data.local.models
 
 sealed class Priority {
     object NONE : Priority()

@@ -1,7 +1,7 @@
 package com.android.shawnclisby.thetodolist.other
 
 import androidx.room.TypeConverter
-import com.android.shawnclisby.thetodolist.data.models.Priority
+import com.android.shawnclisby.thetodolist.data.local.models.Priority
 import java.util.*
 
 class Converters {

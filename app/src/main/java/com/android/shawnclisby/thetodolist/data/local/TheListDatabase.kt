@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.android.shawnclisby.thetodolist.data.models.Task
+import com.android.shawnclisby.thetodolist.data.local.models.Task
 import com.android.shawnclisby.thetodolist.other.Converters
 
 @Database(entities = [Task::class], version = 1)
