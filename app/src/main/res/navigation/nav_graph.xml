@@ -8,7 +8,7 @@
         android:id="@+id/loginFragment"
         android:name="com.android.shawnclisby.thetodolist.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
@@ -17,18 +17,5 @@
         android:id="@+id/homeFragment"
         android:name="com.android.shawnclisby.thetodolist.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_homeFragment_to_addEditFragment"
-            app:destination="@id/addEditFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/addEditFragment"
-        android:name="com.android.shawnclisby.thetodolist.AddEditFragment"
-        android:label="fragment_add_edit"
-        tools:layout="@layout/fragment_add_edit" >
-        <action
-            android:id="@+id/action_addEditFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_home" />
 </navigation>
