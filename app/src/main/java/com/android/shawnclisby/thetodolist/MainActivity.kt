@@ -10,8 +10,10 @@ import androidx.navigation.fragment.NavHostFragment
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel.AuthEvent.LoginError
 import com.android.shawnclisby.androidauth.viewModels.AuthViewModel.AuthEvent.LoginSuccess
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var authViewModel: AuthViewModel

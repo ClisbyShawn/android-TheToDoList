@@ -1,4 +1,4 @@
-package com.android.shawnclisby.thetodolist.data.models
+package com.android.shawnclisby.thetodolist.data.local.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -16,5 +16,4 @@ data class Member(
     @PrimaryKey val memberId: String = UUID.randomUUID().toString(),
     val name: String,
     val email: String,
-    val taskIds: List<Long>,
 )
