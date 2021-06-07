@@ -10,20 +10,17 @@ import java.util.*
 data class Task(
     @PrimaryKey
     val taskId: String = UUID.randomUUID().toString(),
-    val taskCreatedById: String,
     val taskTitle: String,
     val taskCategoryId: String,
-    @Embedded val createdByMember: Member,
-    @Embedded val assignedToMember: Member?
+    @Embedded(prefix = "task_created_member_") val createdBy: Member,
+    @Embedded(prefix = "task_assigned_member_") val assignedTo: Member?
 ) : BaseTask(
-    createdBy = createdByMember,
     title = taskTitle,
     createdAt = System.currentTimeMillis(),
     priority = Priority.NONE,
     completed = false,
     description = null,
-    dueDate = null,
-    assignedTo = assignedToMember
+    dueDate = null
 ) {
     val dueDateFormat: String?
         get() = DateFormat.getDateInstance(DateFormat.MEDIUM).format(dueDate)

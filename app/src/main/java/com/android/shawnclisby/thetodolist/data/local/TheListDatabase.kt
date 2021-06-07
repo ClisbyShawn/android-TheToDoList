@@ -1,39 +1,23 @@
 package com.android.shawnclisby.thetodolist.data.local
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.android.shawnclisby.thetodolist.data.local.models.Category
+import com.android.shawnclisby.thetodolist.data.local.models.Member
+import com.android.shawnclisby.thetodolist.data.local.models.SubTask
 import com.android.shawnclisby.thetodolist.data.local.models.Task
 import com.android.shawnclisby.thetodolist.other.Converters
 
-@Database(entities = [Task::class], version = 1)
+@Database(
+    entities = [Task::class, SubTask::class, Category::class, Member::class],
+    version = 1,
+    exportSchema = false
+)
 @TypeConverters(Converters::class)
 abstract class TheListDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: TheListDatabase? = null
-
-        fun getDatabase(context: Context): TheListDatabase {
-            val tempInstance = INSTANCE
-            if (tempInstance != null) return tempInstance
-            else {
-                synchronized(this) {
-                    val instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        TheListDatabase::class.java,
-                        "the-list-database"
-                    )
-                        .build()
-                    INSTANCE = instance
-                    return instance
-                }
-            }
-        }
-    }
+    abstract fun categoryDao(): CategoryDao
 
 }
